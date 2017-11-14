@@ -8,11 +8,12 @@ In this sample project includes some of useful libraries for Android, such as:
 - [Moshi](https://github.com/square/moshi): A modern JSON library for Android and Java. It makes it easy to parse JSON into Java objects.
 - [Picasso](http://square.github.io/picasso/): A powerful image downloading and caching library for Android.
 - [RxJava2](https://github.com/ReactiveX/RxJava): Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.
+- [Realm DB]()
 
 ## The Clean Architecture
 ![clean architecture](https://8thlight.com/blog/assets/posts/2012-08-13-the-clean-architecture/CleanArchitecture-8b00a9d7e2543fa9ca76b81b05066629.jpg)
 
-Before we go through to learn this architecture, I hope you've understand about the **Clean Architecture** (from [Uncle Bob](https://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html), [Dario Miličić](https://medium.com/@dmilicic/a-detailed-guide-on-developing-android-apps-using-the-clean-architecture-pattern-d38d71e94029#.8b4imw33h), and [Android10](http://fernandocejas.com/2014/09/03/architecting-android-the-clean-way/)). This architecture is the simple combination from those references. So, this architecture makes your code:
+Before we go through to learn this architecture, I hope you've understand about the **Clean Architecture** (from [Uncle Bob](https://blog.8thlight.com/uncle-bob/2012/08/13/the-clean-architecture.html). This architecture is the simple combination from those references. So, this architecture makes your code:
 - **Independent of Frameworks.**
 - **Testable**.
 - **Independent of UI.**
