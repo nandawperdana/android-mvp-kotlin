@@ -7,17 +7,5 @@ import com.nandawperdana.kotlinmvp.api.people.PeopleResponse
  */
 
 class PeopleDomain {
-    private var peopleResponse: PeopleResponse
-
-    init {
-        this.peopleResponse = PeopleResponse()
-    }
-
-    fun getPeopleResponse(): PeopleResponse? {
-        return peopleResponse
-    }
-
-    fun setPeopleResponse(peopleResponse: PeopleResponse) {
-        this.peopleResponse = peopleResponse
-    }
+    var peopleResponse: PeopleResponse = PeopleResponse()
 }

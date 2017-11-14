@@ -9,6 +9,7 @@ import com.nandawperdana.kotlinmvp.api.RootResponseModel
 import com.nandawperdana.kotlinmvp.api.people.PeopleResponse
 import com.nandawperdana.kotlinmvp.domain.interactor.PeopleInteractor
 import com.nandawperdana.kotlinmvp.presentation.presenters.MainPresenter
+import com.nandawperdana.kotlinmvp.presentation.presenters.MainPresenter.MainView.ViewState.*
 import com.nandawperdana.kotlinmvp.util.Enums
 
 /**
@@ -19,31 +20,23 @@ class MainPresenterImpl(private val mView: MainPresenter.MainView) : MainPresent
     private val peopleInteractor: PeopleInteractor = PeopleInteractor(this)
 
     override fun presentState(state: MainPresenter.MainView.ViewState) {
-        Log.i("STATE: ", state.toString())
+        // user state logging
+        Log.i(MainActivity::class.java.simpleName, state.name)
         when (state) {
-            MainPresenter.MainView.ViewState.IDLE -> mView.showState(MainPresenter.MainView.ViewState.IDLE)
-            MainPresenter.MainView.ViewState.LOADING -> mView.showState(MainPresenter.MainView.ViewState.LOADING)
-            MainPresenter.MainView.ViewState.LOAD_PEOPLE ->
-                // loading from API or calculations
+            IDLE -> mView.showState(IDLE)
+            LOADING -> mView.showState(LOADING)
+            LOAD_PEOPLE ->
                 if (AndroidApplication.getInstance.isConnected()) {
-                    presentState(MainPresenter.MainView.ViewState.LOADING)
+                    presentState(LOADING)
                     peopleInteractor.callAPIGetPeople()
                 } else {
                     mView.doRetrieveModel().errorMessage = mView.doRetrieveModel().context?.getString(R.string.message_no_internet)
-                    presentState(MainPresenter.MainView.ViewState.ERROR)
+                    presentState(ERROR)
                 }
-            MainPresenter.MainView.ViewState.SHOW_PEOPLE -> mView.showState(MainPresenter.MainView.ViewState.SHOW_PEOPLE)
-            MainPresenter.MainView.ViewState.SHOW_SCREEN_STATE -> mView.showState(MainPresenter.MainView.ViewState.SHOW_SCREEN_STATE)
-            MainPresenter.MainView.ViewState.ERROR -> mView.showState(MainPresenter.MainView.ViewState.ERROR)
+            SHOW_PEOPLE -> mView.showState(SHOW_PEOPLE)
+            SHOW_SCREEN_STATE -> mView.showState(SHOW_SCREEN_STATE)
+            ERROR -> mView.showState(ERROR)
         }
-    }
-
-    override fun onAttach() {
-
-    }
-
-    override fun onDetach() {
-
     }
 
     override fun resume() {
@@ -62,22 +55,17 @@ class MainPresenterImpl(private val mView: MainPresenter.MainView) : MainPresent
 
     }
 
-    override fun onError(message: String) {
-        mView.doRetrieveModel().errorMessage = message
-        presentState(MainPresenter.MainView.ViewState.ERROR)
-    }
-
     override fun onAPICallSucceed(route: Enums.APIRoute, responseModel: RootResponseModel) {
         when (route) {
             Enums.APIRoute.GET_PEOPLE -> {
-                mView.doRetrieveModel().peopleResponse = responseModel as PeopleResponse
-                presentState(MainPresenter.MainView.ViewState.SHOW_PEOPLE)
+                mView.doRetrieveModel().peopleDomain.peopleResponse = responseModel as PeopleResponse
+                presentState(SHOW_PEOPLE)
             }
         }
     }
 
     override fun onAPICallFailed(route: Enums.APIRoute, throwable: Throwable) {
         mView.doRetrieveModel().errorMessage = throwable.message
-        onError(throwable.message.toString())
+        presentState(ERROR)
     }
 }

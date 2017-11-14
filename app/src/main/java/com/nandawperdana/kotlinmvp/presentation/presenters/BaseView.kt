@@ -21,10 +21,10 @@ interface BaseView {
     fun showToast(message: String?)
 
     /**
-     * This method is used for showing error messages on the UI via dialog.
+     * This method is used for showing messages on the UI via dialog.
      *
      * @param title
      * @param message
      */
-    fun showError(title: String?, message: String?)
+    fun showDialog(title: String?, message: String?)
 }

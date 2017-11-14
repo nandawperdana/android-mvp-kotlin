@@ -15,7 +15,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
  * Created by nandawperdana.
  */
 class APICallManager {
-    var endPoint = Constant.Path.DEFAULT_URL_API
+    private var endPoint = Constant.Path.DEFAULT_URL_API
     var authorizationKey: String
 
     var peopleManager: PeopleManager
@@ -32,7 +32,7 @@ class APICallManager {
                 .addInterceptor(interceptor)
                 .build()
 
-        sRetrofit = Retrofit.Builder()
+        retrofit = Retrofit.Builder()
                 .baseUrl(endPoint)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(MoshiConverterFactory.create())
@@ -42,27 +42,15 @@ class APICallManager {
         // registering API endpoint manager
         this.peopleManager = PeopleManager()
 
-        this.authorizationKey = "2ef8838d-8638-4b75-9f52-a0d84992bf8e"
-    }
-
-    inner class PeopleManager {
-        private val service by lazy {
-            getService(PeopleService::class.java)
-        }
-
-        fun getPeople(): Flowable<PeopleResponse> {
-            return service.getPeople("media", authorizationKey)
-        }
+        this.authorizationKey = "81863324-86f5-4a7b-b101-d9b9af0ec95a"
     }
 
     companion object {
-        var instance: APICallManager? = null
-        private lateinit var sRetrofit: Retrofit
+        private var instance: APICallManager? = null
+        private lateinit var retrofit: Retrofit
 
         /**
          * singleton class instance
-
-         * @return APICallManager
          */
         val getInstance: APICallManager
             get() {
@@ -77,7 +65,19 @@ class APICallManager {
             }
 
         fun <T> getService(serviceClass: Class<T>): T {
-            return sRetrofit.create(serviceClass)
+            return retrofit.create(serviceClass)
         }
     }
+
+    // region Service Managers
+    inner class PeopleManager {
+        private val service by lazy {
+            getService(PeopleService::class.java)
+        }
+
+        fun getPeople(): Flowable<PeopleResponse> {
+            return service.getPeople("media", authorizationKey)
+        }
+    }
+    //endregion
 }
