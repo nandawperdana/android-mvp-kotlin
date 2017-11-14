@@ -1,6 +1,5 @@
 package com.nandawperdana.kotlinmvp.presentation.screens
 
-import android.app.ProgressDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -47,7 +46,7 @@ open class BaseActivity : AppCompatActivity(), BaseView {
         snackbar.show()
     }
 
-    override fun showError(title: String?, message: String?) {
+    override fun showDialog(title: String?, message: String?) {
         if (message != null) {
             showToast(message)
         } else {

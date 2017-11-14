@@ -6,6 +6,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.nandawperdana.kotlinmvp.R
 import com.nandawperdana.kotlinmvp.presentation.presenters.MainPresenter
+import com.nandawperdana.kotlinmvp.presentation.presenters.MainPresenter.MainView.ScreenState.SCREEN_BLANK
+import com.nandawperdana.kotlinmvp.presentation.presenters.MainPresenter.MainView.ScreenState.SCREEN_PEOPLE
+import com.nandawperdana.kotlinmvp.presentation.presenters.MainPresenter.MainView.ViewState.*
 import com.nandawperdana.kotlinmvp.presentation.screens.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -18,6 +21,9 @@ class MainActivity : BaseActivity(), MainPresenter.MainView, SwipeRefreshLayout.
         setContentView(R.layout.activity_main)
 
         init()
+
+        // load data from API
+        presenter.presentState(MainPresenter.MainView.ViewState.LOAD_PEOPLE)
     }
 
     private fun init() {
@@ -30,8 +36,6 @@ class MainActivity : BaseActivity(), MainPresenter.MainView, SwipeRefreshLayout.
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
         recyclerView.adapter = PeopleAdapter(doRetrieveModel().listPeople)
-
-        presenter.presentState(MainPresenter.MainView.ViewState.LOAD_PEOPLE)
     }
 
     override fun showProgress(flag: Boolean) {
@@ -40,32 +44,31 @@ class MainActivity : BaseActivity(), MainPresenter.MainView, SwipeRefreshLayout.
 
     override fun showState(viewState: MainPresenter.MainView.ViewState) {
         when (viewState) {
-            MainPresenter.MainView.ViewState.IDLE -> showProgress(false)
-            MainPresenter.MainView.ViewState.LOADING -> showProgress(true)
-            MainPresenter.MainView.ViewState.SHOW_SCREEN_STATE -> showScreenState()
-            MainPresenter.MainView.ViewState.SHOW_PEOPLE -> showPeople()
-            MainPresenter.MainView.ViewState.ERROR -> {
-                presenter.presentState(MainPresenter.MainView.ViewState.IDLE)
-                showError(null, doRetrieveModel().errorMessage)
+            IDLE -> showProgress(false)
+            LOADING -> showProgress(true)
+            SHOW_SCREEN_STATE -> showScreenState()
+            SHOW_PEOPLE -> showPeople()
+            ERROR -> {
+                presenter.presentState(IDLE)
+                showDialog(null, doRetrieveModel().errorMessage)
             }
         }
     }
 
-    override fun doRetrieveModel(): MainViewModel {
-        return this.model
-    }
+    override fun doRetrieveModel(): MainViewModel = this.model
 
     override fun onRefresh() {
-        presenter.presentState(MainPresenter.MainView.ViewState.LOAD_PEOPLE)
+        presenter.presentState(LOAD_PEOPLE)
     }
 
+    // region View State Methods
     private fun showScreenState() {
         when (doRetrieveModel().screenState) {
-            MainPresenter.MainView.ScreenState.SCREEN_BLANK -> {
+            SCREEN_BLANK -> {
                 textViewBlank.visibility = View.VISIBLE
                 recyclerView.visibility = View.GONE
             }
-            MainPresenter.MainView.ScreenState.SCREEN_PEOPLE -> {
+            SCREEN_PEOPLE -> {
                 textViewBlank.visibility = View.GONE
                 recyclerView.visibility = View.VISIBLE
             }
@@ -75,13 +78,14 @@ class MainActivity : BaseActivity(), MainPresenter.MainView, SwipeRefreshLayout.
     private fun showPeople() {
         doRetrieveModel().setListPeople()
         if (doRetrieveModel().listPeople.isEmpty())
-            doRetrieveModel().screenState = MainPresenter.MainView.ScreenState.SCREEN_BLANK
+            doRetrieveModel().screenState = SCREEN_BLANK
         else {
             // show the data
             recyclerView.adapter.notifyDataSetChanged()
-            doRetrieveModel().screenState = MainPresenter.MainView.ScreenState.SCREEN_PEOPLE
+            doRetrieveModel().screenState = SCREEN_PEOPLE
         }
-        presenter.presentState(MainPresenter.MainView.ViewState.SHOW_SCREEN_STATE)
-        presenter.presentState(MainPresenter.MainView.ViewState.IDLE)
+        presenter.presentState(SHOW_SCREEN_STATE)
+        presenter.presentState(IDLE)
     }
+    //endregion
 }
