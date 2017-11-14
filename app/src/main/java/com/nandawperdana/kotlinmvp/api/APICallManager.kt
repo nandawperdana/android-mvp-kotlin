@@ -1,8 +1,8 @@
 package com.nandawperdana.kotlinmvp.api
 
 import com.nandawperdana.kotlinmvp.BuildConfig
-import com.nandawperdana.kotlinmvp.api.people.PeopleResponse
-import com.nandawperdana.kotlinmvp.api.people.PeopleService
+import com.nandawperdana.kotlinmvp.api.sample.SampleResponse
+import com.nandawperdana.kotlinmvp.api.sample.SampleService
 import com.nandawperdana.kotlinmvp.util.Constant
 import io.reactivex.Flowable
 import okhttp3.OkHttpClient
@@ -16,9 +16,9 @@ import retrofit2.converter.moshi.MoshiConverterFactory
  */
 class APICallManager {
     private var endPoint = Constant.Path.DEFAULT_URL_API
-    var authorizationKey: String
+    lateinit var authorizationKey: String
 
-    var peopleManager: PeopleManager
+    var sampleManager: SampleManager
 
     init {
         if (BuildConfig.BUILD_RELEASE)
@@ -40,9 +40,7 @@ class APICallManager {
                 .build()
 
         // registering API endpoint manager
-        this.peopleManager = PeopleManager()
-
-        this.authorizationKey = "81863324-86f5-4a7b-b101-d9b9af0ec95a"
+        this.sampleManager = SampleManager()
     }
 
     companion object {
@@ -70,13 +68,17 @@ class APICallManager {
     }
 
     // region Service Managers
-    inner class PeopleManager {
+    /**
+     * A sample API manager.
+     * TODO: Replace this with your own API manager class
+     */
+    inner class SampleManager {
         private val service by lazy {
-            getService(PeopleService::class.java)
+            getService(SampleService::class.java)
         }
 
-        fun getPeople(): Flowable<PeopleResponse> {
-            return service.getPeople("media", authorizationKey)
+        fun getSample(): Flowable<SampleResponse> {
+            return service.getSample()
         }
     }
     //endregion

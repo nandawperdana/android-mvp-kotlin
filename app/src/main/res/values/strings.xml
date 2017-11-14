@@ -5,5 +5,4 @@
     <string name="message_failed_request_general">Oops! Something went wrong.</string>
     <string name="message_loading">Loading…</string>
     <string name="message_no_internet">No Internet Connection :(</string>
-    <string name="message_no_people">No People :(</string>
 </resources>

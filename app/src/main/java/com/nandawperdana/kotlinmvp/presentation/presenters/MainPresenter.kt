@@ -4,6 +4,8 @@ import com.nandawperdana.kotlinmvp.presentation.screens.main.MainViewModel
 
 /**
  * Created by nandawperdana.
+ * A sample presenter.
+ * TODO: Replace this with your own presenter
  */
 interface MainPresenter : BasePresenter {
     interface MainView {
@@ -11,11 +13,7 @@ interface MainPresenter : BasePresenter {
          * This enum is used for determine the current state of this screen
          */
         enum class ViewState {
-            IDLE, LOADING, SHOW_SCREEN_STATE, LOAD_PEOPLE, SHOW_PEOPLE, ERROR
-        }
-
-        enum class ScreenState {
-            SCREEN_PEOPLE, SCREEN_BLANK
+            IDLE, LOADING, LOAD_SAMPLE, SHOW_SAMPLE, ERROR,
         }
 
         /**

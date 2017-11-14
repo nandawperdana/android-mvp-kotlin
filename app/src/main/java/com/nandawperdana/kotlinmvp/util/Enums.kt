@@ -9,6 +9,6 @@ class Enums {
     }
 
     enum class APIRoute {
-        GET_PEOPLE
+        GET_SAMPLE
     }
 }

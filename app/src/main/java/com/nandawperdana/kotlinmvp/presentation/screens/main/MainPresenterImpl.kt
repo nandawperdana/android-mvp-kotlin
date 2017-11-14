@@ -6,8 +6,8 @@ import com.nandawperdana.kotlinmvp.AndroidApplication
 import com.nandawperdana.kotlinmvp.R
 import com.nandawperdana.kotlinmvp.api.APICallListener
 import com.nandawperdana.kotlinmvp.api.RootResponseModel
-import com.nandawperdana.kotlinmvp.api.people.PeopleResponse
-import com.nandawperdana.kotlinmvp.domain.interactor.PeopleInteractor
+import com.nandawperdana.kotlinmvp.api.sample.SampleResponse
+import com.nandawperdana.kotlinmvp.domain.interactor.SampleInteractor
 import com.nandawperdana.kotlinmvp.presentation.presenters.MainPresenter
 import com.nandawperdana.kotlinmvp.presentation.presenters.MainPresenter.MainView.ViewState.*
 import com.nandawperdana.kotlinmvp.util.Enums
@@ -17,7 +17,8 @@ import com.nandawperdana.kotlinmvp.util.Enums
  */
 
 class MainPresenterImpl(private val mView: MainPresenter.MainView) : MainPresenter, APICallListener {
-    private val peopleInteractor: PeopleInteractor = PeopleInteractor(this)
+    // A sample interactor, TODO: some interactors if needed.
+    private val sampleInteractor: SampleInteractor = SampleInteractor(this)
 
     override fun presentState(state: MainPresenter.MainView.ViewState) {
         // user state logging
@@ -25,16 +26,15 @@ class MainPresenterImpl(private val mView: MainPresenter.MainView) : MainPresent
         when (state) {
             IDLE -> mView.showState(IDLE)
             LOADING -> mView.showState(LOADING)
-            LOAD_PEOPLE ->
+            LOAD_SAMPLE ->
                 if (AndroidApplication.getInstance.isConnected()) {
                     presentState(LOADING)
-                    peopleInteractor.callAPIGetPeople()
+                    sampleInteractor.callAPIGetSample()
                 } else {
                     mView.doRetrieveModel().errorMessage = mView.doRetrieveModel().context?.getString(R.string.message_no_internet)
                     presentState(ERROR)
                 }
-            SHOW_PEOPLE -> mView.showState(SHOW_PEOPLE)
-            SHOW_SCREEN_STATE -> mView.showState(SHOW_SCREEN_STATE)
+            SHOW_SAMPLE -> mView.showState(SHOW_SAMPLE)
             ERROR -> mView.showState(ERROR)
         }
     }
@@ -57,9 +57,10 @@ class MainPresenterImpl(private val mView: MainPresenter.MainView) : MainPresent
 
     override fun onAPICallSucceed(route: Enums.APIRoute, responseModel: RootResponseModel) {
         when (route) {
-            Enums.APIRoute.GET_PEOPLE -> {
-                mView.doRetrieveModel().peopleDomain.peopleResponse = responseModel as PeopleResponse
-                presentState(SHOW_PEOPLE)
+            // sample response, TODO: Replace this with your own API call response
+            Enums.APIRoute.GET_SAMPLE -> {
+                mView.doRetrieveModel().sampleDomain.sampleResponse = responseModel as SampleResponse
+                presentState(SHOW_SAMPLE)
             }
         }
     }

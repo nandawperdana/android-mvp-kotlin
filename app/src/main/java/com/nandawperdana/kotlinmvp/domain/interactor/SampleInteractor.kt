@@ -7,12 +7,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 /**
+ * A sample interactor.
+ * TODO: Replace this with your own interactor
  * Created by nandawperdana.
  */
-class PeopleInteractor(private var listener: APICallListener) : Interactor {
-    fun callAPIGetPeople() {
-        val route = Enums.APIRoute.GET_PEOPLE
-        val call = APICallManager.getInstance.peopleManager.getPeople()
+class SampleInteractor(private var listener: APICallListener) : Interactor {
+    fun callAPIGetSample() {
+        val route = Enums.APIRoute.GET_SAMPLE
+        val call = APICallManager.getInstance.sampleManager.getSample()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
         call.subscribe(

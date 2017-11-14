@@ -6,6 +6,7 @@ package com.nandawperdana.kotlinmvp.util
 
 class Constant {
     object Path {
-        val DEFAULT_URL_API = "https://firebasestorage.googleapis.com/v0/b/nanda-sample.appspot.com/o/"
+        // TODO: Replace API URL Endpoint
+        val DEFAULT_URL_API = ""
     }
 }
